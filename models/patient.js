@@ -1,4 +1,5 @@
-function Patient(id, nombre, apellido, sexo, fechaNacimiento, edad, estadoCivil, email, celular) {
+
+function Patient(id, nombre, apellido, sexo, fechaNacimiento, edad, estadoCivil, correo, celular, foto) {
     this.id = id;
     this.nombre = nombre;
     this.apellido = apellido;
@@ -8,6 +9,7 @@ function Patient(id, nombre, apellido, sexo, fechaNacimiento, edad, estadoCivil,
     this.estadoCivil = estadoCivil;
     this.email = email;
     this.celular = celular;
+    this.foto = foto;
 }
 
 module.exports = Patient;
