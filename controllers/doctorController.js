@@ -2,23 +2,8 @@
 
 const firebase = require("../db");
 const firestore = firebase.firestore();
+const trimFields = require("../functions/trimFields");
 const auth = firebase.auth();
-
-function trimField(field) {
-  try {
-      let f = field.trim();
-      return f;
-  }
-catch(err) {
-      return field;
-  }
-}
-
-function trimFields(object) {
-	for (const key in object) {
-		object[key] = trimField(object[key]);
-	}
-}
 
 const addDoctor = async (req, res, next) => {
 	try {

@@ -2,22 +2,8 @@
 
 const firebase = require("../db");
 const Patient = require("../models/patient");
+const trimFields = require("../functions/trimFields");
 const firestore = firebase.firestore();
-
-function trimField(field) {
-	try {
-		let f = field.trim();
-		return f;
-	} catch (err) {
-		return field;
-	}
-}
-
-function trimFields(object) {
-	for (const key in object) {
-		object[key] = trimField(object[key]);
-	}
-}
 
 const addPatient = async (req, res, next) => {
 	try {
@@ -35,12 +21,12 @@ const addPatient = async (req, res, next) => {
 			foto,
 		} = req.body;
 
-		console.log(req.body);
-
 		if (!doctorId) {
-			res.status(400).json(
-				"No se puede realizar la comunicacion con el servidor. Doctor ID faltante."
-			);
+			res
+				.status(400)
+				.json(
+					"No se puede realizar la comunicacion con el servidor. Doctor ID faltante."
+				);
 			return;
 		}
 
@@ -59,11 +45,6 @@ const addPatient = async (req, res, next) => {
 		if (errores) {
 			res.status(400).json(errores);
 			return;
-		}
-
-		if (foto) {
-			// generar data url y asi
-			// req.body.foto = url generada
 		}
 
 		await firestore.collection("Patients").doc().set(req.body);
@@ -137,12 +118,12 @@ const updatePatient = async (req, res, next) => {
 			foto,
 		} = req.body;
 
-		console.log(req.body);
-
 		if (!id) {
-			res.status(400).json(
-				"No se puede realizar la comunicacion con el servidor. Paciente ID faltante."
-			);
+			res
+				.status(400)
+				.json(
+					"No se puede realizar la comunicacion con el servidor. Paciente ID faltante."
+				);
 			return;
 		}
 
@@ -161,11 +142,6 @@ const updatePatient = async (req, res, next) => {
 		if (errores) {
 			res.status(400).json(errores);
 			return;
-		}
-
-		if (foto) {
-			// generar data url y asi
-			// req.body.foto = url generada
 		}
 
 		const data = req.body;
