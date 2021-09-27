@@ -19,11 +19,11 @@ const getAppointments = async(req, res, next) => {
     try {
         const id = await req.query.id;
 
-        const patients = await firestore
+        const appointments = await firestore
             .collection("Appointments")
             .where("doctorId", "==", id);
 
-        const data = await patients.get();
+        const data = await appointments.get();
 
         const appointmentsArray = [];
 
@@ -40,7 +40,7 @@ const getAppointments = async(req, res, next) => {
                     doc.data().horario,
                     doc.data().comentarios
                 );
-                patientsArray.push(appointment);
+                appointmentsArray.push(appointment);
             });
             res.send(appointmentsArray);
         }
@@ -69,8 +69,8 @@ const updateAppointment = async(req, res, next) => {
     try {
         const id = req.query.id;
         const data = req.body;
-        const patient = await firestore.collection("Appointments").doc(id);
-        await patient.update(data);
+        const appointment = await firestore.collection("Appointments").doc(id);
+        await appointment.update(data);
         res.send("Appointment record updated successfully");
     } catch (error) {
         res.status(400).send(error.message);
