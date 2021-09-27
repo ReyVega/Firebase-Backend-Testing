@@ -94,7 +94,7 @@ const getPatients = async (req, res, next) => {
 				doc.data().fechaNacimiento,
 				doc.data().edad,
 				doc.data().estadoCivil,
-				doc.data().correo,
+				doc.data().email,
 				doc.data().celular
 			);
 			patientsArray.push(patient);
