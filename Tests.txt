@@ -1,9 +1,0 @@
-{
-    "nombre": "hola",
-    "apellido": "hola",
-    "sexo": "hola",
-    "fechaNacimiento": "hola",
-    "estadoCivil": "hola",
-    "correo": "hola",
-    "celular": "hola"
-}
