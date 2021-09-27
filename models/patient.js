@@ -1,3 +1,4 @@
+
 function Patient(id, nombre, apellido, sexo, fechaNacimiento, edad, estadoCivil, correo, celular, foto) {
     this.id = id;
     this.nombre = nombre;
@@ -6,7 +7,7 @@ function Patient(id, nombre, apellido, sexo, fechaNacimiento, edad, estadoCivil,
     this.fechaNacimiento = fechaNacimiento;
     this.edad = edad;
     this.estadoCivil = estadoCivil;
-    this.correo = correo;
+    this.email = email;
     this.celular = celular;
     this.foto = foto;
 }

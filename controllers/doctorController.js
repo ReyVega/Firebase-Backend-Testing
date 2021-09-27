@@ -54,7 +54,6 @@ const addDoctor = async (req, res, next) => {
 			especialidad,
       doctorId: newUser.uid,
 		});
-		res.json("Record saved succesfully");
 		res.status(200).json({ doctorId: newUser.uid });
 	} catch (error) {
 		res.status(400).json(error.message);
