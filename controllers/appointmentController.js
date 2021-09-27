@@ -8,10 +8,10 @@ const firestore = firebase.firestore();
 const addAppointment = async(req, res, next) => {
     try {
         const data = req.body;
-        await firestore.collection("Appointments").doc().set(data);
-        res.send("Record saved successfully");
+        const response = await firestore.collection("Appointments").add(data);
+        res.json(response.id);
     } catch (error) {
-        res.status(400).send(error.message);
+        res.status(400).json(error.message);
     }
 }
 
@@ -28,7 +28,7 @@ const getAppointments = async(req, res, next) => {
         const appointmentsArray = [];
 
         if (data.empty) {
-            res.status(400).send(error.message);
+            res.status(400).json(error.message);
         } else {
             data.forEach((doc) => {
                 const appointment = new Appointment(
@@ -42,10 +42,10 @@ const getAppointments = async(req, res, next) => {
                 );
                 appointmentsArray.push(appointment);
             });
-            res.send(appointmentsArray);
+            res.json(appointmentsArray);
         }
     } catch (error) {
-        res.status(400).send(error.message);
+        res.status(400).json(error.message);
     }
 }
 
@@ -56,12 +56,12 @@ const getAppointment = async(req, res, next) => {
         const data = await appointment.get();
 
         if (data.exists) {
-            res.status(200).json(data);
+            res.status(200).json(data.data());
         } else {
-            res.status(400).send("Appointment with the given id not found");
+            res.status(400).json("Appointment with the given id not found");
         }
     } catch (error) {
-        res.status(400).send(error.message);
+        res.status(400).json(error.message);
     }
 }
 
@@ -71,9 +71,9 @@ const updateAppointment = async(req, res, next) => {
         const data = req.body;
         const appointment = await firestore.collection("Appointments").doc(id);
         await appointment.update(data);
-        res.send("Appointment record updated successfully");
+        res.json("Appointment record updated successfully");
     } catch (error) {
-        res.status(400).send(error.message);
+        res.status(400).json(error.message);
     }
 }
 
@@ -81,9 +81,9 @@ const deleteAppointment = async (req, res, next) => {
     try {
         const id = req.query.id;
         await firestore.collection("Appointments").doc(id).delete();
-        res.send("Record deleted successfully");
+        res.json("Record deleted successfully");
     } catch (error) {
-        res.status(400).send(error.message);
+        res.status(400).json(error.message);
     }
 };
 

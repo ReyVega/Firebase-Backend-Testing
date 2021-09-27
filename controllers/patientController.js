@@ -47,8 +47,8 @@ const addPatient = async (req, res, next) => {
 			return;
 		}
 
-		await firestore.collection("Patients").doc().set(req.body);
-		res.json("Record saved successfully");
+		const patient = await firestore.collection("Patients").add(req.body);
+		res.json(patient.id);
 	} catch (error) {
 		res.status(400).json(error.message);
 	}
@@ -94,7 +94,7 @@ const getPatient = async (req, res, next) => {
 		const data = await patient.get();
 
 		if (data.exists) {
-			res.status(200).json(data);
+			res.status(200).json(data.data());
 		} else {
 			res.status(400).json("Patient with the given id not found");
 		}
