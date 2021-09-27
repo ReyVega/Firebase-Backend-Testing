@@ -4,8 +4,26 @@ const firebase = require("../db");
 const firestore = firebase.firestore();
 const auth = firebase.auth();
 
+function trimField(field) {
+  try {
+      let f = field.trim();
+      return f;
+  }
+catch(err) {
+      return field;
+  }
+}
+
+function trimFields(object) {
+	for (const key in object) {
+		object[key] = trimField(object[key]);
+	}
+}
+
 const addDoctor = async (req, res, next) => {
 	try {
+		trimFields(req.body);
+
 		const {
 			nombre,
 			apellido,
@@ -19,21 +37,23 @@ const addDoctor = async (req, res, next) => {
 		let errores = "";
 
 		let camposFaltantes = "";
-		if (!nombre.trim()) camposFaltantes += "* Nombre\n";
-		if (!apellido.trim()) camposFaltantes += "* Apellido(s)\n";
-		if (!email.trim()) camposFaltantes += "* Email\n";
-		if (!telefono.trim()) camposFaltantes += "* Numero telefonico\n";
-		if (!contrasena.trim()) camposFaltantes += "* Contrasena\n";
-		if (!conf_contrasena.trim())
-			camposFaltantes += "* Confirmar contrasena\n";
-		if (!especialidad.trim()) camposFaltantes += "Especialidad\n";
+		if (!nombre) camposFaltantes += "* Nombre(s)";
+		if (!apellido) camposFaltantes += "* Apellido(s)\n";
+		if (!email) camposFaltantes += "* Email\n";
+		if (!telefono) camposFaltantes += "* Numero telefonico\n";
+		if (!contrasena) camposFaltantes += "* Contrasena\n";
+		if (!conf_contrasena) camposFaltantes += "* Confirmar contrasena\n";
+		if (!especialidad) camposFaltantes += "* Especialidad\n";
 
 		if (camposFaltantes) errores += "Campos faltantes:\n" + camposFaltantes;
 
 		if (contrasena != conf_contrasena)
 			errores += "Las contrasenas no coinciden";
 
-    if (errores) res.status(400).json(errores);
+		if (errores) {
+			res.status(400).json(errores);
+			return;
+		}
 
 		const newUser = await auth.createUser({
 			email: email,
@@ -48,10 +68,10 @@ const addDoctor = async (req, res, next) => {
 			telefono,
 			especialidad,
 		});
-		res.send("Record saved succesfully");
+		res.json("Record saved succesfully");
 		res.status(200).json({ doctorId: newUser.uid });
 	} catch (error) {
-		res.status(400).send(error.message);
+		res.status(400).json(error.message);
 	}
 };
 
@@ -64,10 +84,10 @@ const getDoctor = async (req, res, next) => {
 		if (data.exists) {
 			res.status(200).json({ doctorId: data.id });
 		} else {
-			res.status(400).send("Doctor with the given id not found");
+			res.status(400).json("Doctor with the given id not found");
 		}
 	} catch (error) {
-		res.status(400).send(error.message);
+		res.status(400).json(error.message);
 	}
 };
 
@@ -77,9 +97,9 @@ const updateDoctor = async (req, res, next) => {
 		const data = req.body;
 		const patient = await firestore.collection("Doctors").doc(id);
 		await patient.update(data);
-		res.send("Patient record updated successfully");
+		res.json("Patient record updated successfully");
 	} catch (error) {
-		res.status(400).send(error.message);
+		res.status(400).json(error.message);
 	}
 };
 
@@ -87,9 +107,9 @@ const deleteDoctor = async (req, res, next) => {
 	try {
 		const id = req.params.id;
 		await firestore.collection("Doctors").doc(id).delete();
-		res.send("Record deleted successfully");
+		res.json("Record deleted successfully");
 	} catch (error) {
-		res.status(400).send(error.message);
+		res.status(400).json(error.message);
 	}
 };
 
