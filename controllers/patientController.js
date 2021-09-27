@@ -16,7 +16,7 @@ const addPatient = async (req, res, next) => {
 
 const getPatients = async (req, res, next) => {
     try {
-        const doctorId = await req.query.doctorId;
+        const doctorId = req.query.doctorId;
 
         const patients = await firestore
             .collection("Patients")
@@ -68,7 +68,7 @@ const getPatient = async (req, res, next) => {
 
 const updatePatient = async (req, res, next) => {
     try {
-        const id = req.params.id;
+        const id = req.query.id;
         const data = req.body;
         const patient = await firestore.collection("Patients").doc(id);
         await patient.update(data);
@@ -80,7 +80,7 @@ const updatePatient = async (req, res, next) => {
 
 const deletePatient = async (req, res, next) => {
     try {
-        const id = req.params.id;
+        const id = req.query.id;
         await firestore.collection("Patients").doc(id).delete();
         res.send("Record deleted successfully");
     } catch (error) {
