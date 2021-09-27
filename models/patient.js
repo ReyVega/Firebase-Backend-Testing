@@ -1,5 +1,5 @@
 
-function Patient(id, nombre, apellido, sexo, fechaNacimiento, edad, estadoCivil, correo, celular, foto) {
+function Patient(id, nombre, apellido, sexo, fechaNacimiento, edad, estadoCivil, email, celular, foto) {
     this.id = id;
     this.nombre = nombre;
     this.apellido = apellido;
