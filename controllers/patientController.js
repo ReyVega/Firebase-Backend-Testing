@@ -38,7 +38,7 @@ const addPatient = async (req, res, next) => {
 		console.log(req.body);
 
 		if (!doctorId) {
-			res.status(400).send(
+			res.status(400).json(
 				"No se puede realizar la comunicacion con el servidor. Doctor ID faltante."
 			);
 			return;
@@ -67,9 +67,9 @@ const addPatient = async (req, res, next) => {
 		}
 
 		await firestore.collection("Patients").doc().set(req.body);
-		res.send("Record saved successfully");
+		res.json("Record saved successfully");
 	} catch (error) {
-		res.status(400).send(error.message);
+		res.status(400).json(error.message);
 	}
 };
 
@@ -85,27 +85,23 @@ const getPatients = async (req, res, next) => {
 
 		const patientsArray = [];
 
-		if (data.empty) {
-			res.status(400).send(error.message);
-		} else {
-			data.forEach((doc) => {
-				const patient = new Patient(
-					doc.id,
-					doc.data().nombre,
-					doc.data().apellido,
-					doc.data().sexo,
-					doc.data().fechaNacimiento,
-					doc.data().edad,
-					doc.data().estadoCivil,
-					doc.data().correo,
-					doc.data().celular
-				);
-				patientsArray.push(patient);
-			});
-			res.send(patientsArray);
-		}
+		data.forEach((doc) => {
+			const patient = new Patient(
+				doc.id,
+				doc.data().nombre,
+				doc.data().apellido,
+				doc.data().sexo,
+				doc.data().fechaNacimiento,
+				doc.data().edad,
+				doc.data().estadoCivil,
+				doc.data().correo,
+				doc.data().celular
+			);
+			patientsArray.push(patient);
+		});
+		res.json(patientsArray);
 	} catch (error) {
-		res.status(400).send(error.message);
+		res.status(400).json(error.message);
 	}
 };
 
@@ -118,10 +114,10 @@ const getPatient = async (req, res, next) => {
 		if (data.exists) {
 			res.status(200).json(data);
 		} else {
-			res.status(400).send("Patient with the given id not found");
+			res.status(400).json("Patient with the given id not found");
 		}
 	} catch (error) {
-		res.status(400).send(error.message);
+		res.status(400).json(error.message);
 	}
 };
 
@@ -144,7 +140,7 @@ const updatePatient = async (req, res, next) => {
 		console.log(req.body);
 
 		if (!id) {
-			res.status(400).send(
+			res.status(400).json(
 				"No se puede realizar la comunicacion con el servidor. Paciente ID faltante."
 			);
 			return;
@@ -175,9 +171,9 @@ const updatePatient = async (req, res, next) => {
 		const data = req.body;
 		const patient = await firestore.collection("Patients").doc(id);
 		await patient.update(data);
-		res.send("Patient record updated successfully");
+		res.json("Patient record updated successfully");
 	} catch (error) {
-		res.status(400).send(error.message);
+		res.status(400).json(error.message);
 	}
 };
 
@@ -185,9 +181,9 @@ const deletePatient = async (req, res, next) => {
 	try {
 		const id = req.query.id;
 		await firestore.collection("Patients").doc(id).delete();
-		res.send("Record deleted successfully");
+		res.json("Record deleted successfully");
 	} catch (error) {
-		res.status(400).send(error.message);
+		res.status(400).json(error.message);
 	}
 };
 

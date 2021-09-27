@@ -67,6 +67,7 @@ const addDoctor = async (req, res, next) => {
 			email,
 			telefono,
 			especialidad,
+      doctorId: newUser.uid,
 		});
 		res.json("Record saved succesfully");
 		res.status(200).json({ doctorId: newUser.uid });
